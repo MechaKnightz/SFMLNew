@@ -1,0 +1,7 @@
+﻿  main.cpp
+  Engine.cpp
+c:\users\constantin c\source\repos\sfmlnew\sfmlnew\engine.cpp(18): warning C4244: '=': conversion from '__int64' to 'long', possible loss of data
+c:\users\constantin c\source\repos\sfmlnew\sfmlnew\engine.cpp(43): warning C4244: 'return': conversion from '__int64' to 'long', possible loss of data
+  Generating Code...
+  SFMLNew.vcxproj -> C:\Users\Constantin C\Source\Repos\SFMLNew\x64\Debug\SFMLNew.exe
+  SFMLNew.vcxproj -> C:\Users\Constantin C\Source\Repos\SFMLNew\x64\Debug\SFMLNew.pdb (Partial PDB)
