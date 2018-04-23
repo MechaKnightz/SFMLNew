@@ -16,15 +16,12 @@ namespace eng
 		std::cout << "Loading Content...";
 		loadContent();
 		std::cout << "Starting...";
-		gameIsRunning = true;
 		startingTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();;
 		double next_game_tick = static_cast<double>(getTickCount());
-		int loops;
-		float interpolation;
 
-		while (gameIsRunning) {
+		while (window->isOpen()) {
 
-			loops = 0;
+			int loops = 0;
 			int64_t tempvar = getTickCount();
 			while ( tempvar > next_game_tick && loops < MAX_FRAMESKIP) {
 				update();
@@ -33,7 +30,7 @@ namespace eng
 				loops++;
 			}
 
-			interpolation = float(getTickCount() + SKIP_TICKS - next_game_tick)
+			float interpolation = float(getTickCount() + SKIP_TICKS - next_game_tick)
 				/ float(SKIP_TICKS);
 			render(interpolation);
 		}
@@ -45,16 +42,29 @@ namespace eng
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - startingTime;
 	}
 
-	sf::CircleShape* shape;
+	sf::VertexArray triangle(sf::Triangles, 3);
+
 	void Engine::loadContent()
 	{
-		shape = new sf::CircleShape(200.f);
-		shape->setFillColor(sf::Color::Green);
+		triangle[0].position = sf::Vector2f(100, 300);
+		triangle[1].position = sf::Vector2f(300, 300);
+		triangle[2].position = sf::Vector2f(200, 100);
+
+		triangle[0].color = sf::Color::Blue;
+		triangle[1].color = sf::Color::Blue;
+		triangle[2].color = sf::Color::Blue;
 	}
 
 	int counter = 0;
 	void Engine::update()
 	{
+		sf::Event event;
+		while (window->pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window->close();
+		}
+
 		std::cout << "updating: " << counter <<"\n";
 		counter++;
 	}
@@ -62,7 +72,7 @@ namespace eng
 	void Engine::render(float interp)
 	{
 		window->clear();
-		window->draw(*shape);
+		window->draw(triangle);
 		window->display();
 	}
 }
