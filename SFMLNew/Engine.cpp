@@ -13,17 +13,19 @@ namespace eng
 
 	int Engine::run()
 	{
-		std::cout << "Starting..";
+		std::cout << "Loading Content...";
+		loadContent();
+		std::cout << "Starting...";
 		gameIsRunning = true;
 		startingTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();;
-		double next_game_tick = getTickCount();
+		double next_game_tick = static_cast<double>(getTickCount());
 		int loops;
 		float interpolation;
 
 		while (gameIsRunning) {
 
 			loops = 0;
-			long tempvar = getTickCount();
+			int64_t tempvar = getTickCount();
 			while ( tempvar > next_game_tick && loops < MAX_FRAMESKIP) {
 				update();
 
@@ -38,7 +40,7 @@ namespace eng
 		return -1;
 	}
 
-	long Engine::getTickCount()
+	int64_t Engine::getTickCount()
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - startingTime;
 	}
