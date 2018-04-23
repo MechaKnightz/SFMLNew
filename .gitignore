@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs/SFMLNew/v15/Browse.VC.opendb
+# Visual Studio 2015 cache/options directory
+.vs/
