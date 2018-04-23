@@ -1,6 +1,6 @@
-#include <SFML/Graphics.hpp>
 #include "stdafx.h"
 #include "Engine.h"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <chrono>
 

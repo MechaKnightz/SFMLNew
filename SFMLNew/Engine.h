@@ -6,8 +6,8 @@ namespace eng
 	class Engine
 	{
 	public:
-		int Engine::run();
 		Engine::Engine(sf::RenderWindow* win);
+		int Engine::run();
 	private:
 		sf::RenderWindow* window;
 		bool gameIsRunning;
