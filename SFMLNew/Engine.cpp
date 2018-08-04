@@ -1,78 +1,71 @@
 #include "stdafx.h"
 #include "Engine.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <chrono>
 
 namespace eng
 {
-	Engine::Engine(sf::RenderWindow* win)
+	void Engine::init(ContentManager& manager)
 	{
-		window = win;
+		this->manager = &manager;
 	}
 
-	int Engine::run()
+	void Engine::cleanUp()
 	{
-		std::cout << "Loading Content...";
-		loadContent();
-		std::cout << "Starting...";
-		startingTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();;
-		double next_game_tick = static_cast<double>(getTickCount());
 
-		while (window->isOpen()) {
-
-			int loops = 0;
-			int64_t tempvar = getTickCount();
-			while ( tempvar > next_game_tick && loops < MAX_FRAMESKIP) {
-				update();
-
-				next_game_tick += SKIP_TICKS;
-				loops++;
-			}
-
-			float interpolation = float(getTickCount() + SKIP_TICKS - next_game_tick)
-				/ float(SKIP_TICKS);
-			render(interpolation);
-		}
-		return -1;
 	}
 
-	int64_t Engine::getTickCount()
+	void Engine::changeState(IGameState* state)
 	{
-		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - startingTime;
+		if(!gameStates.empty()) gameStates.top()->cleanup();
+		gameStates.push(state);
+		state->init();
 	}
 
-	sf::VertexArray triangle(sf::Triangles, 3);
-
-	void Engine::loadContent()
+	void Engine::pushState(IGameState* state)
 	{
-		triangle[0].position = sf::Vector2f(100, 300);
-		triangle[1].position = sf::Vector2f(300, 300);
-		triangle[2].position = sf::Vector2f(200, 100);
-
-		triangle[0].color = sf::Color::Blue;
-		triangle[1].color = sf::Color::Blue;
-		triangle[2].color = sf::Color::Blue;
+		if (!gameStates.empty()) gameStates.top()->cleanup();
+		gameStates.push(state);
+		state->init();
 	}
 
-	int counter = 0;
-	void Engine::update()
+	void Engine::popState()
 	{
-		sf::Event event;
-		while (window->pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window->close();
-		}
-
-		std::cout << "updating: " << counter <<"\n";
-		counter++;
+		if (!gameStates.empty()) gameStates.top()->cleanup();
+		gameStates.pop();
 	}
 
-	void Engine::render(float interp)
+	void Engine::handleEvents()
 	{
-		window->clear();
-		window->draw(triangle);
-		window->display();
+	}
+
+	void Engine::update(sf::RenderWindow& window, sf::Time elapsed)
+	{
+		updater.update(*this, window, elapsed);
+		gameStates.top()->update(*this, window, elapsed);
+	}
+
+	void Engine::draw(sf::RenderWindow& window)
+	{
+		updater.draw(window);
+		gameStates.top()->draw(window);
+	}
+	void Engine::closeGame()
+	{
+		gameIsRunning = false;
+	}
+
+	bool Engine::isGameRunning() const
+	{
+		return gameIsRunning;
+	}
+
+	void Engine::addToUpdater(sf::Drawable* drawable)
+	{
+		updater.addDrawable(drawable);
+	}
+
+	void Engine::addToUpdater(Updatable* updatable)
+	{
+		updater.addUpdatable(updatable);
 	}
 }
