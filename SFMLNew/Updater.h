@@ -1,22 +1,27 @@
 #pragma once
-#include <SFML/Graphics/Drawable.hpp>
 #include "IUpdatable.h"
 #include <vector>
 
+
+class GameObject;
+
+const int LAYERCOUNT = 4;
 
 namespace eng {
 	class Engine;
 }
 
-class Updater : public Updatable
+class Updater
 {
 public:
-	void addDrawable(sf::Drawable* drawable);
-	void addUpdatable(Updatable* updatable);
+	void addGameObject(GameObject* gameObject);
+	void addUpdatable(IUpdatable* updatable);
 
 	void draw(sf::RenderWindow& window);
-	void update(eng::Engine& engine, sf::RenderWindow& window, sf::Time elapsed) override;
+	void update(eng::Engine& engine, sf::RenderWindow& window, sf::Time elapsed);
 private:
-	std::vector<sf::Drawable*> drawables;
-	std::vector<Updatable*> updatables;
+	std::vector<GameObject*> staticDrawables[LAYERCOUNT];
+	std::vector<GameObject*> drawables[LAYERCOUNT];
+
+	std::vector<IUpdatable*> updatables;
 };

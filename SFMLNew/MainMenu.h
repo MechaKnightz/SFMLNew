@@ -1,7 +1,7 @@
 #pragma once
 #include "IGameState.h"
-#include <SFML/Graphics.hpp>
 #include "Sprite.h"
+#include "AnimatedSprite.h"
 
 class MainMenu : public IGameState
 {
@@ -30,5 +30,6 @@ private:
 
 	ContentManager* manager;
 	Sprite sprite;
+	AnimatedSprite animatedSprite;
 };
 

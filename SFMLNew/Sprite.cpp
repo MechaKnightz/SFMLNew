@@ -17,10 +17,6 @@ void Sprite::setPos(float x, float y)
 	this->y = y;
 }
 
-void Sprite::update()
-{
-}
-
 void Sprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (texture)

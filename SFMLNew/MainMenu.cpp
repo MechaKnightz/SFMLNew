@@ -3,12 +3,14 @@
 #include "Engine.h"
 #include "TestState.h"
 #include "ContentManager.h"
-#include <iostream>
+#include "AnimatedSprite.h"
 
 void MainMenu::init()
 {
-	sprite.setTexture(contentManager->loadContent<sf::Texture>("texture1"));
-	engine->addToUpdater(&sprite);
+	//sprite.setTexture(contentManager->loadTexture("texture1"));
+	//engine->addToUpdater(&sprite);
+	animatedSprite.setAnimation(&contentManager->loadAnimation("testAnimation"));
+	engine->addToUpdater(&animatedSprite);
 }
 
 void MainMenu::cleanup()
@@ -39,7 +41,6 @@ void MainMenu::update(eng::Engine& engine, sf::RenderWindow& window, sf::Time el
 	{
 		sprite.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 	}
-	std::cout << elapsed.asMilliseconds() << "\n";
 }
 
 void MainMenu::draw(sf::RenderWindow& window)

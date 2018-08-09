@@ -8,9 +8,10 @@ public:
 	AnimatedSprite();
 	~AnimatedSprite();
 
-	void update() override;
-
+	void update(eng::Engine& engine, sf::RenderWindow& window, sf::Time elapsed) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	void setAnimation(Animation* animation);
 private:
 	AnimationPlayer animPlayer;
 };

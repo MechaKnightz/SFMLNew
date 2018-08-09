@@ -1,9 +1,12 @@
 #pragma once
+#include "IUpdatable.h"
+#include <SFML/System/Time.hpp>
 
-class Entity
+class Entity : public IUpdatable
 {
 public:
-	virtual void update() {};
+	void update(eng::Engine& engine, sf::RenderWindow& window, sf::Time elapsed) override { }
 protected:
+	~Entity() = default;
 	float x, y, rot, xScale, yScale;
 };

@@ -59,12 +59,12 @@ namespace eng
 		return gameIsRunning;
 	}
 
-	void Engine::addToUpdater(sf::Drawable* drawable)
+	void Engine::addToUpdater(GameObject* gameObject)
 	{
-		updater.addDrawable(drawable);
+		updater.addGameObject(gameObject);
 	}
 
-	void Engine::addToUpdater(Updatable* updatable)
+	void Engine::addToUpdater(IUpdatable* updatable)
 	{
 		updater.addUpdatable(updatable);
 	}

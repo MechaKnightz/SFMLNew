@@ -31,8 +31,8 @@ namespace eng
 		void closeGame();
 		bool isGameRunning() const;
 
-		void addToUpdater(sf::Drawable* drawable);
-		void addToUpdater(Updatable* updatable);
+		void addToUpdater(GameObject* gameObject);
+		void addToUpdater(IUpdatable* updatable);
 	private:
 		std::stack<IGameState*> gameStates;
 		ContentManager* manager;

@@ -1,27 +1,69 @@
 #include "Updater.h"
-#include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "GameObject.h"
 
-void Updater::addDrawable(sf::Drawable* drawable)
+struct Comparator
 {
-	drawables.push_back(drawable);
+	bool operator() (const GameObject* first, const GameObject* second) const
+	{
+		return first->getY() < second->getY();
+	}
+};
+
+void Updater::addGameObject(GameObject* gameObject)
+{
+	if(gameObject->isStatic)
+	{
+		staticDrawables[gameObject->layer].push_back(gameObject);
+	}
+	else
+	{
+		drawables[gameObject->layer].push_back(gameObject);
+	}
+	updatables.push_back(gameObject);
 }
 
-void Updater::addUpdatable(Updatable* updatable)
+void Updater::addUpdatable(IUpdatable* updatable)
 {
 	updatables.push_back(updatable);
 }
 
 void Updater::draw(sf::RenderWindow& window)
 {
-	for (auto i = 0; i < drawables.size(); i++)
+	for (auto i = 0; i < LAYERCOUNT; i++)
 	{
-		if (!drawables[i])
+		auto currentLayer = staticDrawables[i];
+		for (auto j = 0; j < currentLayer.size(); j++)
 		{
-			drawables.erase(drawables.begin() + i);
-			i--;
+			const auto currentDrawable = currentLayer[j];
+			
+			if (!currentDrawable)
+			{
+				currentLayer.erase(currentLayer.begin() + j);
+				j--;
+			}
+			else
+			{
+				window.draw(*currentDrawable);
+			}
 		}
-		window.draw(*drawables[i]);
+
+		currentLayer = drawables[i];
+		sort(currentLayer.begin(), currentLayer.end(), Comparator());
+		for (auto j = 0; j < currentLayer.size(); j++)
+		{
+			const auto currentDrawable = currentLayer[j];
+
+			if (!currentDrawable)
+			{
+				currentLayer.erase(currentLayer.begin() + j);
+				j--;
+			}
+			else
+			{
+				window.draw(*currentDrawable);
+			}
+		}
 	}
 }
 

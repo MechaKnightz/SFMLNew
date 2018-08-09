@@ -13,15 +13,14 @@ public:
 	void setPos(float x, float y);
 	void setTexture(sf::Texture& texture);
 
-	void update() override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 protected:
 	void updateCoords();
 	void updateTexCoords();
 	sf::FloatRect getLocalBounds() const;
 
-	sf::Vertex vertices[4];
-	sf::IntRect rect;
 private:
+	sf::IntRect rect;
 	sf::Texture* texture;
+	sf::Vertex vertices[4];
 };
